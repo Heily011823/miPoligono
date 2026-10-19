@@ -1,0 +1,445 @@
+
+/* Permite que el padding y el borde se incluyan en el tamaño de los elementos */
+* {
+    box-sizing: border-box;
+}
+
+/* Colores que se utilizan en toda la página */
+:root {
+    --fondo: #fff9fc;
+    --rosa: #f5d4e2;
+    --rosa-fuerte: #a83e70;
+    --texto: #604653;
+    --texto-suave: #8b7580;
+    --blanco: #ffffff;
+    --borde: #f0e2e9;
+    --rosa-suave: #fff3f8;
+}
+
+/* Estilos generales de la página */
+body {
+    margin: 0;
+    padding: 22px;
+    font-family: Arial, sans-serif;
+    background: var(--fondo);
+    color: var(--texto);
+    line-height: 1.5;
+}
+
+/* Centra el contenido y limita su ancho */
+.contenedor {
+    max-width: 1250px;
+    margin: 0 auto;
+}
+
+/* Organiza el título y el botón de ubicación */
+.encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 0 18px;
+}
+
+/* Texto pequeño que aparece encima del título */
+.etiqueta {
+    margin: 0 0 5px;
+    color: var(--rosa-fuerte);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+/* Apariencia del título principal */
+.encabezado h1 {
+    margin: 0 0 4px;
+    color: var(--rosa-fuerte);
+    font-size: clamp(25px, 3vw, 32px);
+}
+
+/* Texto descriptivo del encabezado */
+.encabezado p:last-child {
+    margin: 0;
+    color: var(--texto-suave);
+    font-size: 14px;
+}
+
+/* Muestra la dirección y los datos de ubicación */
+.ubicacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+}
+
+/* Evita que los datos de ubicación se desborden */
+.datos-ubicacion {
+    min-width: 0;
+}
+
+#direccion {
+    display: block;
+    overflow-wrap: anywhere;
+    font-size: 14px;
+}
+
+/* Ajusta el espacio de los textos de ubicación */
+.ubicacion p {
+    margin: 4px 0 0;
+}
+
+/* Alinea la nota a la derecha en pantallas grandes */
+.ubicacion > .nota {
+    max-width: 40%;
+    overflow-wrap: anywhere;
+    text-align: right;
+}
+
+/* Apariencia general de las tarjetas */
+.tarjeta {
+    min-width: 0;
+    padding: 18px;
+    margin-bottom: 16px;
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 13px;
+}
+
+/* Estilo de los títulos secundarios */
+h2 {
+    margin: 0 0 14px;
+    color: var(--rosa-fuerte);
+    font-size: 17px;
+    font-weight: 600;
+}
+
+/* Estilo de los textos de ayuda */
+.nota {
+    color: var(--texto-suave);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* Caja para mostrar mensajes del sistema */
+.estado {
+    padding: 9px 11px;
+    margin: 12px 0 0;
+    background: var(--rosa-suave);
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* Distribuye el mapa y las mediciones en dos columnas */
+.zona-principal {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(270px, 0.8fr);
+    gap: 16px;
+    align-items: start;
+}
+
+/* Evita que el mapa y la columna lateral se desborden */
+.mapa-seccion {
+    min-width: 0;
+}
+
+.columna-lateral {
+    min-width: 0;
+}
+
+/* Alinea los títulos con los elementos que los acompañan */
+.titulo-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.titulo-fila h2 {
+    margin-bottom: 12px;
+}
+
+/* Define el espacio donde se muestra el mapa */
+.mapa-contenedor {
+    overflow: hidden;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+}
+
+/* Ocupa todo el ancho disponible y establece la altura del mapa */
+#mapa {
+    width: 100%;
+    height: 400px;
+}
+
+/* Estilo del texto informativo del mapa */
+#info {
+    margin: 10px 0;
+    color: var(--texto-suave);
+    font-size: 12px;
+}
+
+/* Organiza los botones y deja espacio entre ellos */
+.botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 0;
+}
+
+/* Apariencia general de los botones */
+button {
+    padding: 9px 12px;
+    border: 1px solid var(--rosa);
+    border-radius: 8px;
+    background: var(--rosa-suave);
+    color: var(--rosa-fuerte);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+/* Cambia el fondo del botón cuando se pasa el cursor */
+button:hover:not(:disabled) {
+    background: var(--rosa);
+}
+
+/* Diferencia los botones que están desactivados */
+button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* Resalta el botón para obtener la ubicación */
+#btnUbicar {
+    flex-shrink: 0;
+    background: var(--rosa-fuerte);
+    border-color: var(--rosa-fuerte);
+    color: white;
+}
+
+#btnUbicar:hover:not(:disabled) {
+    background: #8d315d;
+}
+
+/* Presenta el área y el perímetro en tarjetas pequeñas */
+.resultado {
+    padding: 13px;
+    margin-bottom: 9px;
+    background: var(--rosa-suave);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+}
+
+/* Estilo de las etiquetas de cada medición */
+.resultado span {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--texto-suave);
+    font-size: 12px;
+}
+
+/* Resalta los valores de las mediciones */
+.resultado strong {
+    display: block;
+    color: var(--rosa-fuerte);
+    font-size: clamp(16px, 2vw, 21px);
+    overflow-wrap: anywhere;
+}
+
+/* Organiza los nombres de los campos del formulario */
+label {
+    display: block;
+    margin: 12px 0 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Estilo de los campos de texto y selección de archivos */
+input[type="text"],
+input[type="file"] {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 9px;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    background: white;
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 13px;
+}
+
+/* Marca el campo que está seleccionado */
+input:focus {
+    outline: 2px solid #eab3ca;
+    outline-offset: 2px;
+}
+
+/* Ajusta el selector de color */
+input[type="color"] {
+    width: 45px;
+    height: 34px;
+    padding: 2px;
+    border: 1px solid var(--borde);
+    border-radius: 7px;
+    background: white;
+    cursor: pointer;
+}
+
+/* Coloca las pestañas en una fila */
+.pestanas {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    margin-top: 2px;
+    border-bottom: 1px solid var(--borde);
+}
+
+/* Apariencia de cada pestaña */
+.pestana {
+    flex: 0 0 auto;
+    padding: 11px 15px;
+    background: transparent;
+    border: 0;
+    border-radius: 8px 8px 0 0;
+    color: var(--texto-suave);
+}
+
+/* Fondo de la pestaña cuando se pasa el cursor */
+.pestana:hover:not(:disabled) {
+    background: var(--rosa-suave);
+}
+
+/* Indica cuál pestaña está seleccionada */
+.pestana.activa {
+    background: var(--rosa-suave);
+    color: var(--rosa-fuerte);
+    box-shadow: inset 0 -2px var(--rosa-fuerte);
+}
+
+/* Ajusta las tarjetas que contienen el contenido de las pestañas */
+.panel-pestana {
+    margin-top: 0;
+    border-top: 0;
+    border-radius: 0 0 12px 12px;
+}
+
+/* Oculta las pestañas que no están seleccionadas */
+.panel-pestana[hidden] {
+    display: none !important;
+}
+
+/* Permite desplazar la tabla horizontalmente si no cabe */
+.tabla-contenedor {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Ajusta el tamaño y los bordes de la tabla */
+table {
+    width: 100%;
+    margin: 8px 0;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+/* Espacio y alineación de las celdas */
+th,
+td {
+    padding: 10px;
+    text-align: left;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--borde);
+}
+
+/* Diferencia los encabezados de la tabla */
+th {
+    background: var(--rosa-suave);
+    color: var(--rosa-fuerte);
+    font-weight: 600;
+}
+
+/* Estilo del texto al final de la página */
+footer {
+    padding: 12px 0 4px;
+    color: var(--texto-suave);
+    font-size: 11px;
+    text-align: center;
+}
+
+/* En pantallas medianas, el mapa ocupa una fila completa */
+@media (max-width: 850px) {
+    .zona-principal {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+    }
+
+    .columna-lateral {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #mapa {
+        height: 360px;
+    }
+}
+
+/* Ajustes para celulares */
+@media (max-width: 550px) {
+    body {
+        padding: 12px;
+    }
+
+    .encabezado {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 4px;
+    }
+
+    .encabezado #btnUbicar {
+        width: 100%;
+    }
+
+    .ubicacion {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .ubicacion > .nota {
+        max-width: 100%;
+        text-align: left;
+    }
+
+    .tarjeta {
+        padding: 13px;
+        margin-bottom: 12px;
+    }
+
+    #mapa {
+        height: 300px;
+    }
+
+    .botones button {
+        flex: 1 1 130px;
+    }
+
+    .pestana {
+        padding: 10px 12px;
+    }
+
+    .resultado strong {
+        font-size: 17px;
+    }
+}

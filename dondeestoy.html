@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+<!-- Indica que el documento utiliza HTML5 -->
+<html lang="es">
+<head>
+    <!-- Permite mostrar correctamente las tildes y la ñ -->
+    <meta charset="UTF-8">
+
+    <!-- Adapta la página al tamaño de la pantalla -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Título que aparece en la pestaña del navegador -->
+    <title>Mi polígono | Geolocalización</title>
+
+    <!-- Carga los estilos necesarios para mostrar el mapa de Leaflet -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <!-- Conecta el archivo CSS de la página -->
+    <link rel="stylesheet" href="dondeestoy.css">
+</head>
+
+<body>
+<!-- Contiene todo el contenido principal de la página -->
+<main class="contenedor">
+
+    <!-- Muestra el título, la descripción y el botón de ubicación -->
+    <header class="encabezado">
+        <div>
+            <p class="etiqueta">GEOGRAFÍA · PROGRAMACIÓN</p>
+            <h1>Mi polígono</h1>
+            <p>Dibuja un lugar y calcula su área.</p>
+        </div>
+
+        <!-- El JavaScript utiliza este ID para obtener la ubicación -->
+        <button id="btnUbicar" type="button">Mi ubicación</button>
+    </header>
+
+    <!-- Muestra la dirección, las coordenadas y el estado de la ubicación -->
+    <section class="ubicacion">
+        <div class="datos-ubicacion">
+            <strong id="direccion">Ubicación no consultada</strong>
+            <p id="coordenadas" class="nota">
+                Las coordenadas aparecerán aquí.
+            </p>
+        </div>
+
+        <p id="estadoUbicacion" class="nota">
+            Ubicación no solicitada.
+        </p>
+    </section>
+
+    <!-- Organiza el mapa y las mediciones en la parte principal -->
+    <div class="zona-principal">
+
+        <!-- Sección donde se muestra y se utiliza el mapa -->
+        <section class="tarjeta mapa-seccion">
+            <div class="titulo-fila">
+                <h2>Mapa interactivo</h2>
+
+                <!-- Permite limpiar los puntos del mapa -->
+                <button id="btnLimpiar" type="button">Limpiar</button>
+            </div>
+
+            <!-- Leaflet utiliza este contenedor para dibujar el mapa -->
+            <div class="mapa-contenedor">
+                <div id="mapa" aria-label="Mapa interactivo"></div>
+            </div>
+
+            <!-- Muestra instrucciones y mensajes relacionados con el mapa -->
+            <p id="info" aria-live="polite">
+                Haz clic en el mapa para agregar vértices.
+                Necesitas mínimo 3 puntos.
+            </p>
+
+            <div class="botones">
+                <!-- Agrega al polígono la ubicación actual del usuario -->
+                <button id="btnAgregarUbicacion" type="button">
+                    Agregar mi ubicación
+                </button>
+
+                <!-- Cierra el polígono cuando tiene los puntos necesarios -->
+                <button id="btnCerrar" type="button" disabled>
+                    Cerrar polígono
+                </button>
+
+                <!-- Elimina el último punto agregado -->
+                <button id="btnDeshacer" type="button" disabled>
+                    Deshacer punto
+                </button>
+
+                <!-- Permite descargar el polígono en formato GeoJSON -->
+                <button id="btnExportar" type="button" disabled>
+                    Descargar GeoJSON
+                </button>
+            </div>
+        </section>
+
+        <!-- Columna que contiene los resultados y las opciones del polígono -->
+        <aside class="columna-lateral">
+            <section class="tarjeta">
+                <h2>Mediciones</h2>
+
+                <!-- Muestra el área calculada por el JavaScript -->
+                <div class="resultado">
+                    <span>Área</span>
+                    <strong id="area">—</strong>
+                </div>
+
+                <!-- Muestra el perímetro calculado por el JavaScript -->
+                <div class="resultado">
+                    <span>Perímetro</span>
+                    <strong id="perimetro">—</strong>
+                </div>
+
+                <!-- Permite escribir el nombre del polígono -->
+                <label for="nombrePoligono">Nombre del polígono</label>
+                <input
+                    id="nombrePoligono"
+                    type="text"
+                    maxlength="80"
+                    value="Mi polígono"
+                    placeholder="Ej. Cancha de la universidad"
+                >
+
+                <!-- Permite elegir el color del polígono -->
+                <label for="colorPoligono">Color del polígono</label>
+                <input
+                    id="colorPoligono"
+                    type="color"
+                    value="#d94f91"
+                >
+
+                <!-- Muestra mensajes sobre el estado y la validación del polígono -->
+                <p id="validacion" class="estado">
+                    Dibuja un polígono para comenzar.
+                </p>
+            </section>
+        </aside>
+
+    </div>
+
+    <!-- Permite cambiar entre las herramientas adicionales -->
+    <nav class="pestanas" aria-label="Herramientas adicionales">
+        <button
+            type="button"
+            class="pestana activa"
+            data-panel="panel-coordenadas"
+            aria-selected="true"
+        >
+            Coordenadas
+        </button>
+
+        <button
+            type="button"
+            class="pestana"
+            data-panel="panel-archivos"
+            aria-selected="false"
+        >
+            Archivos
+        </button>
+
+        <button
+            type="button"
+            class="pestana"
+            data-panel="panel-geocerca"
+            aria-selected="false"
+        >
+            Geocerca
+        </button>
+    </nav>
+
+    <!-- Panel que presenta las coordenadas de los puntos agregados -->
+    <section
+        id="panel-coordenadas"
+        class="panel-pestana tarjeta"
+    >
+        <div class="titulo-fila">
+            <h2>Coordenadas de los vértices</h2>
+            <span class="nota">6 decimales</span>
+        </div>
+
+        <!-- Tabla donde JavaScript muestra la latitud y longitud de cada punto -->
+        <div class="tabla-contenedor">
+            <table>
+                <thead>
+                    <tr>
+                        <th>N.º</th>
+                        <th>Latitud</th>
+                        <th>Longitud</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tablaPuntos">
+                    <tr>
+                        <td colspan="3">Aún no hay puntos.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="botones">
+            <!-- Guarda los datos según la lógica del JavaScript -->
+            <button id="btnGuardar" type="button">Guardar</button>
+
+            <!-- Recupera los datos guardados según la lógica del JavaScript -->
+            <button id="btnRecuperar" type="button">Recuperar</button>
+        </div>
+
+        <!-- Informa si el guardado o la recuperación se realizaron -->
+        <p id="estadoGuardado" class="nota"></p>
+    </section>
+
+    <!-- Panel para cargar polígonos desde archivos -->
+    <section
+        id="panel-archivos"
+        class="panel-pestana tarjeta"
+        hidden
+    >
+        <h2>Importar un polígono</h2>
+
+        <label for="archivoGeoJSON">
+            Selecciona un archivo GeoJSON o JSON
+        </label>
+
+        <!-- Limita los tipos de archivo que se pueden seleccionar -->
+        <input
+            id="archivoGeoJSON"
+            type="file"
+            accept=".geojson,.json,application/geo+json,application/json"
+        >
+
+        <p class="nota">
+            Puedes cargar un polígono guardado anteriormente
+            para visualizarlo y editarlo.
+        </p>
+    </section>
+
+    <!-- Panel para vigilar si el usuario entra o sale del polígono -->
+    <section
+        id="panel-geocerca"
+        class="panel-pestana tarjeta"
+        hidden
+    >
+        <h2>Vigilancia de ubicación</h2>
+
+        <p class="nota">
+            Recibe un aviso cuando tu ubicación pase de dentro
+            a fuera del polígono o de fuera a dentro.
+        </p>
+
+        <div class="botones">
+            <!-- Inicia la vigilancia de la ubicación -->
+            <button id="btnVigilar" type="button" disabled>
+                Iniciar vigilancia
+            </button>
+
+            <!-- Detiene la vigilancia de la ubicación -->
+            <button
+                id="btnPararVigilancia"
+                type="button"
+                disabled
+            >
+                Detener vigilancia
+            </button>
+        </div>
+
+        <!-- Muestra el estado de la geocerca -->
+        <p id="estadoGeocerca" class="estado">
+            La vigilancia está detenida.
+        </p>
+
+        <p class="nota">
+            La vigilancia requiere permiso de geolocalización.
+        </p>
+    </section>
+
+    <!-- Texto que aparece al final de la página -->
+    <footer>
+        Mi polígono · Taller de geolocalización
+    </footer>
+
+</main>
+
+<!-- Carga la biblioteca Leaflet para trabajar con mapas -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Carga Turf.js para operaciones y cálculos geográficos -->
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js"></script>
+
+<!-- Carga el código JavaScript que controla las funciones de la página -->
+<script src="dondeestoy.js"></script>
+
+<script>
+    // Busca todas las pestañas y los paneles de contenido
+    const pestanas = document.querySelectorAll(".pestana");
+    const paneles = document.querySelectorAll(".panel-pestana");
+
+    // Recorre las pestañas para detectar cuál selecciona el usuario
+    pestanas.forEach((pestana) => {
+        pestana.addEventListener("click", () => {
+
+            // Obtiene el ID del panel relacionado con la pestaña seleccionada
+            const panelSeleccionado = pestana.dataset.panel;
+
+            // Actualiza el aspecto y el estado de cada pestaña
+            pestanas.forEach((boton) => {
+                const seleccionada = boton === pestana;
+
+                boton.classList.toggle("activa", seleccionada);
+                boton.setAttribute("aria-selected", seleccionada);
+            });
+
+            // Muestra el panel seleccionado y oculta los demás
+            paneles.forEach((panel) => {
+                panel.hidden = panel.id !== panelSeleccionado;
+            });
+
+            // Ajusta el tamaño del mapa cuando se cambia de pestaña
+            if (typeof mapa !== "undefined") {
+                setTimeout(() => mapa.invalidateSize(), 100);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
